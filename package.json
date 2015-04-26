@@ -8,13 +8,21 @@
   "author": "Will Klein",
   "license": "MIT",
   "dependencies": {
-    "react": "^0.13.2"
+    "react": "^0.13.2",
+    "lodash": "^3.7.0"
   },
   "devDependencies": {
     "babel-core": "^5.1.13",
     "babel-loader": "^5.0.0",
     "react-hot-loader": "^1.2.5",
     "webpack": "^1.8.9",
-    "webpack-dev-server": "^1.8.2"
+    "webpack-dev-server": "^1.8.2",
+    "autoprefixer-core": "^5.1.11",
+    "csswring": "^3.0.3",
+    "postcss": "^4.1.5",
+    "postcss-nested": "^0.2.2",
+    "postcss-loader": "^0.4.0",
+    "style-loader": "^0.12.0",
+    "css-loader": "^0.12.0"
   }
 }
