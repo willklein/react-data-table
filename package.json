@@ -1,0 +1,20 @@
+{
+  "name": "react-data-table",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Will Klein",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^0.13.2"
+  },
+  "devDependencies": {
+    "babel-core": "^5.1.13",
+    "babel-loader": "^5.0.0",
+    "react-hot-loader": "^1.2.5",
+    "webpack": "^1.8.9",
+    "webpack-dev-server": "^1.8.2"
+  }
+}
