@@ -2,12 +2,48 @@ import _ from 'lodash';
 import React from 'react/addons';
 
 import DataTableHeader from './DataTableHeader';
+import DataTableColumn from './DataTableColumn';
 
 import _style from '../styles/paper.css';
 
 export default class DataTable extends React.Component {
-  propTypes: {
-    data: React.PropTypes.array.isRequired
+  constructor(props) {
+    super(props);
+    this.state = {
+      columns: this._getColumns()
+    };
+  }
+
+  _getColumns() {
+    let columns = [];
+    React.Children.forEach(this.props.children, (child, index) => {
+      if (child == null) {
+        return;
+      }
+
+      if (child.type.__DataTableColumn__) {
+        columns.push(child);
+      }
+    });
+
+    if (!columns.length) {
+      let first = _.first(this.props.data);
+      let keys = _.keys(first);
+
+      return _.map(keys, (key) => {
+        return {
+          dataKey: key,
+          label: key
+        }
+      });
+    }
+
+    return _.map(columns, (column) => {
+      return {
+        dataKey: column.props.dataKey,
+        label: column.props.label
+      };
+    });
   }
 
   render() {
@@ -36,7 +72,7 @@ export default class DataTable extends React.Component {
       if (child == null) {
         return;
       }
-      
+
       if (child.type.__DataTableHeader__) {
         header = child;
       }
@@ -50,11 +86,10 @@ export default class DataTable extends React.Component {
   }
 
   _getTableHeaders() {
-    let first = _.first(this.props.data);
-    let keys = _.keys(first);
+    let columns = this.state.columns;
 
-    return _.reduce(keys, (result, n, key) => {
-      result.push(<th>{ n }</th>);
+    return _.reduce(columns, (result, column, key) => {
+      result.push(<th>{ column.label }</th>);
       return result;
     }, []);
   }
@@ -70,8 +105,12 @@ export default class DataTable extends React.Component {
   }
 
   _getDataCells(item) {
-    return _.map(item, (value) => {
-      return <td>{ value }</td>;
+    return _.map(this.state.columns, (column) => {
+      return <td>{ item[column.dataKey] }</td>;
     });
   }
 }
+
+DataTable.propTypes = {
+  data: React.PropTypes.array.isRequired
+};
