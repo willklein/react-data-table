@@ -6,6 +6,10 @@ import DataTableColumn from './DataTableColumn';
 
 import _style from '../styles/paper.css';
 
+const propTypes = {
+  data: React.PropTypes.array.isRequired
+};
+
 export default class DataTable extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +20,7 @@ export default class DataTable extends React.Component {
 
   _getColumns() {
     let columns = [];
+
     React.Children.forEach(this.props.children, (child, index) => {
       if (child == null) {
         return;
@@ -89,15 +94,15 @@ export default class DataTable extends React.Component {
     let columns = this.state.columns;
 
     return _.reduce(columns, (result, column, key) => {
-      result.push(<th>{ column.label }</th>);
+      result.push(<th key={ `rdt-th-${key}` }>{ column.label }</th>);
       return result;
     }, []);
   }
 
   _getDataRows() {
-    return _.map(this.props.data, (item) => {
+    return _.map(this.props.data, (item, key) => {
       return (
-        <tr>
+        <tr key={ `rdt-tr-${key}` }>
           { this._getDataCells(item) }
         </tr>
       );
@@ -105,12 +110,10 @@ export default class DataTable extends React.Component {
   }
 
   _getDataCells(item) {
-    return _.map(this.state.columns, (column) => {
-      return <td>{ item[column.dataKey] }</td>;
+    return _.map(this.state.columns, (column, key) => {
+      return <td key={ `rdt-td-${key}` }>{ item[column.dataKey] }</td>;
     });
   }
 }
 
-DataTable.propTypes = {
-  data: React.PropTypes.array.isRequired
-};
+DataTable.propTypes = propTypes;
