@@ -18,39 +18,6 @@ export default class DataTable extends React.Component {
     };
   }
 
-  _getColumns() {
-    let columns = [];
-
-    React.Children.forEach(this.props.children, (child, index) => {
-      if (child == null) {
-        return;
-      }
-
-      if (child.type.__DataTableColumn__) {
-        columns.push(child);
-      }
-    });
-
-    if (!columns.length) {
-      let first = _.first(this.props.data);
-      let keys = _.keys(first);
-
-      return _.map(keys, (key) => {
-        return {
-          dataKey: key,
-          label: key
-        }
-      });
-    }
-
-    return _.map(columns, (column) => {
-      return {
-        dataKey: column.props.dataKey,
-        label: column.props.label
-      };
-    });
-  }
-
   render() {
     return (
       <div className="rdt-container">
@@ -70,24 +37,38 @@ export default class DataTable extends React.Component {
   }
 
   _getHeader() {
-    let header;
+    return _.find(this.props.children, (child) => {
+      return child.type.__DataTableHeader__;
+    });;
+  }
 
-    // console.log(React.children.forEach);
-    React.Children.forEach(this.props.children, (child, index) => {
-      if (child == null) {
-        return;
+  _getColumns() {
+    let columns = _.reduce(this.props.children, (collection, child) => {
+      if (child.type.__DataTableColumn__) {
+        collection.push(child);
       }
 
-      if (child.type.__DataTableHeader__) {
-        header = child;
-      }
+      return collection;
+    }, []);
+
+    if (!columns.length) {
+      let first = _.first(this.props.data);
+      let keys = _.keys(first);
+
+      return _.map(keys, (key) => {
+        return {
+          dataKey: key,
+          label: key
+        }
+      });
+    }
+
+    return _.map(columns, (column) => {
+      return {
+        dataKey: column.props.dataKey,
+        label: column.props.label
+      };
     });
-
-    // let header = _.find(this.props.children, (child) => {
-    //   return child.type === DataTableHeader.type;
-    // });
-
-    return header;
   }
 
   _getTableHeaders() {
