@@ -13,6 +13,7 @@ const propTypes = {
 export default class DataTable extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       columns: this._getColumns()
     };
@@ -39,7 +40,7 @@ export default class DataTable extends React.Component {
   _getHeader() {
     return _.find(this.props.children, (child) => {
       return child.type.__DataTableHeader__;
-    });;
+    });
   }
 
   _getColumns() {
@@ -63,19 +64,17 @@ export default class DataTable extends React.Component {
       });
     }
 
-    return _.map(columns, (column) => {
-      return {
-        dataKey: column.props.dataKey,
-        label: column.props.label
-      };
-    });
+    return _.pluck(columns, 'props');
   }
 
   _getTableHeaders() {
     let columns = this.state.columns;
 
     return _.reduce(columns, (result, column, key) => {
-      result.push(<th key={ `rdt-th-${key}` }>{ column.label }</th>);
+      let props = this._getColumnProps(column);
+
+      result.push(<th key={ `rdt-th-${key}` } { ...props }>{ column.label }</th>);
+
       return result;
     }, []);
   }
@@ -92,8 +91,20 @@ export default class DataTable extends React.Component {
 
   _getDataCells(item) {
     return _.map(this.state.columns, (column, key) => {
-      return <td key={ `rdt-td-${key}` }>{ item[column.dataKey] }</td>;
+      let props = this._getColumnProps(column);
+
+      return <td key={ `rdt-td-${key}` } { ...props }>{ item[column.dataKey] }</td>;
     });
+  }
+
+  _getColumnProps(column) {
+    if (column.align) {
+      return {
+        style: {
+          textAlign: column.align
+        }
+      };
+    }
   }
 }
 
