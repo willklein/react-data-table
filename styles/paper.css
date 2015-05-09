@@ -37,12 +37,24 @@ body {
     text-align: right;
   }
 
+  .svg-ic_check_box_24px-dims,
+  .svg-ic_check_box_outline_blank_24px-dims {
+    width: 24px;
+    height: 24px;
+  }
+
   th {
     color: #767676;
     font-size: 0.92rem;
     font-weight: 300;
     padding: 1rem 2rem;
     text-align: left;
+  }
+
+  td {
+    color: #212121;
+    font-size: 1rem;
+    padding: 1rem 2rem;
   }
 
   tbody {
@@ -52,12 +64,6 @@ body {
 
     tr {
       border-top: 1px solid rgba(0, 0, 0, 0.05);
-
-      td {
-        color: #212121;
-        font-size: 1rem;
-        padding: 1rem 2rem;
-      }
     }
   }
 
