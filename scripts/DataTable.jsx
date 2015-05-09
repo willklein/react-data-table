@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react/addons';
 
+import Checkbox from './Checkbox';
 import DataTableHeader from './DataTableHeader';
 import DataTableColumn from './DataTableColumn';
 
@@ -86,13 +87,14 @@ export default class DataTable extends React.Component {
 
   _getTableHeaders() {
     let columns = this.state.columns;
+    let onCheckboxClick = this._selectAllRows.bind(this);
 
     return _.reduce(columns, (result, column, key) => {
       result.push(<th key={ `rdt-th-${key}` } { ...column.additionalProps }>{ column.label }</th>);
 
       return result;
     }, [
-      <th>{ this._getCheckbox(this._selectAllRows, null, this.state.allRowsSelected) }</th>
+      <th key="checkAll"><Checkbox checked={ this.state.allRowsSelected } onClick={ onCheckboxClick } /></th>
     ]);
   }
 
@@ -101,21 +103,22 @@ export default class DataTable extends React.Component {
 
     return _.map(data, (item, key) => {
       let selected = _.contains(this.state.selectedRows, key);
-      let props = {
+      let onCheckboxClick = this._selectRow.bind(this, key, selected);
+      let trProps = {
         className: selected ? 'selected' : '',
         key: `rdt-tr-${key}`
       };
 
       return (
-        <tr { ...props }>
-          <td>{ this._getCheckbox(this._selectRows, key, selected) }</td>
+        <tr { ...trProps }>
+          <td><Checkbox checked={ selected } onClick={ onCheckboxClick } /></td>
           { this._getDataCells(item) }
         </tr>
       );
     });
   }
 
-  _selectRows(key, selected) {
+  _selectRow(key, selected) {
     let rows = this.state.selectedRows;
 
     if (selected) {
@@ -146,17 +149,6 @@ export default class DataTable extends React.Component {
       allRowsSelected: !allRowsSelected,
       selectedRows: rows
     });
-  }
-
-  _getCheckbox(selectRows, key, selected) {
-    let props = {
-      className: selected
-          ? 'svg-ic_check_box_24px svg-ic_check_box_24px-dims'
-          : 'svg-ic_check_box_outline_blank_24px svg-ic_check_box_outline_blank_24px-dims',
-      onClick: _.bind(selectRows, this, key, selected)
-    };
-
-    return <div { ...props }></div>;
   }
 
   _getDataCells(item) {
