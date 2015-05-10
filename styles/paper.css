@@ -1,5 +1,4 @@
 html {
-  /*background-color: #f9f9f9;*/
   font-family: 'Roboto', sans-serif;
   font-size: 12px;
 }
@@ -37,10 +36,19 @@ body {
     text-align: right;
   }
 
-  .svg-ic_check_box_24px-dims,
-  .svg-ic_check_box_outline_blank_24px-dims {
-    width: 24px;
-    height: 24px;
+
+  .checkbox {
+    .svg-path {
+      fill: #767676;
+    }
+
+    &.checked .svg-path {
+      fill: #2196f3;
+    }
+  }
+
+  .svg-path-fill-none {
+    fill: none;
   }
 
   th {
